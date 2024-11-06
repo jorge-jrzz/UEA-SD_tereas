@@ -1,45 +1,17 @@
-import socket
+from uber import Uber
 
+import socket
+import random
 
 SERVER_IP = 'xxx.xxx.xxx.xxx'
 SERVER_PORT = 2020
-
-
-class Uber:
-    def __init__(self, plate: int, available: bool):
-        """
-        Initializes the Uber instance with a license plate and availability status.
-        
-        Parameters:
-        plate (int): The license plate number of the Uber.
-        is_available (bool): Whether the Uber is available or not. Default is True.
-        """
-        self._plate = plate
-        self._available = available
-
-    def set_availability(self, available):
-        """Sets the availability status of the Uber."""
-        self._available = available
-    
-    def is_available(self) -> bool:
-        """Returns current status of the UBer """
-        return self._available 
-
-
-
 
 if __name__ == '__main__': 
     ganancia_total = 0.0
     num_viajes = 0
     
-    uber1 = Uber(0, True)
-    uber2 = Uber(1, True)
-    uber3 = Uber(2, True)
-    uber4 = Uber(3, True)
-    uber5 = Uber(4, True)
-    print(uber1.is_available()) 
-    available_uber = [uber1, uber2, uber3, uber4, uber5]
-
+    available_uber = [Uber(i, True) for i in range(0, 5)]
+    
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_address = (SERVER_IP, SERVER_PORT)
     print('Iniciando en {} puerto {}'.format(*server_address))
@@ -61,8 +33,19 @@ if __name__ == '__main__':
             print('Mensaje recibido:', data.decode())
 
             if data.decode() == 'estado':
-                respuesta = f'Ganancias: {ganancia_total}, Viajes realizados: {num_viajes}'
+                respuesta = f'{ganancia_total},{num_viajes}'
                 connection.sendall(respuesta.encode())
+            elif data.decode() == 'viaje':
+                current_plate = -1
+                for uber in available_uber:
+                    if uber.is_available():
+                        uber.set_availability(False)
+                        current_plate = uber.get_plate()
+                        break
+                respuesta = f'{current_plate},{random.randint(23, 100)}'
+                connection.sendall(respuesta.encode())
+            elif data.decode().split(',')[0] == 'terminar':
+                available_uber[int(data.decode().split(',')[1])].set_availability(True)
             else:
                 respuesta = "Comando no reconocido"
                 connection.sendall(respuesta.encode())

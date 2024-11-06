@@ -1,5 +1,6 @@
 import socket
 import time
+import random
 
 SERVER_IP = 'xxx.xxx.xxx.xxx'
 SERVER_PORT = 2020
@@ -13,13 +14,21 @@ if __name__ == '__main__':
     try:
         while True:
             # Enviar mensaje al servidor
-            message = input("Introduzca el mensaje para el servidor: ") or "estado"
+            message = input("Introduzca el mensaje para el servidor: ")
             socket_client.sendall(message.encode())
             
             # Recibir respuesta del servidor
             data = socket_client.recv(1024)
-            print('Respuesta del servidor:', data.decode())
-            
+            request = data.decode().split(',')
+
+            print('Respuesta del servidor:', request)
+            if int(request[0]) == -1:
+                print('No hay autos disponibles')
+            else:
+                print('Viaje en curso . . .')
+                time.sleep(random.randint(3, 8))
+                socket_client.sendall(f'terminar,{request[0]}'.encode())
+
             # Pausa para no sobrecargar
             time.sleep(1)
     finally:
