@@ -11,7 +11,7 @@ class Uber:
         plate (int): The license plate number of the Uber.
         is_available (bool): Whether the Uber is available or not. Default is True.
         """
-        self._plate = license_plate
+        self._plate = plate
         self._available = available
 
     def set_availability(self, available):
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     uber3 = Uber(2, True)
     uber4 = Uber(3, True)
     uber5 = Uber(4, True)
-    
+    print(uber1.is_available()) 
     available_uber = [uber1, uber2, uber3, uber4, uber5]
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
