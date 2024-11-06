@@ -1,6 +1,9 @@
 import socket
 
 
+SERVER_IP = 'xxx.xxx.xxx.xxx'
+SERVER_PORT = 2020
+
 
 class Uber:
     def __init__(self, plate: int, available: bool):
@@ -38,7 +41,7 @@ if __name__ == '__main__':
     available_uber = [uber1, uber2, uber3, uber4, uber5]
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_address = ('localhost', 10000)
+    server_address = (SERVER_IP, SERVER_PORT)
     print('Iniciando en {} puerto {}'.format(*server_address))
     sock.bind(server_address)
 

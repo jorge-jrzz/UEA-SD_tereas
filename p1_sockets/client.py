@@ -1,9 +1,12 @@
 import socket
 import time
 
+SERVER_IP = 'xxx.xxx.xxx.xxx'
+SERVER_PORT = 2020
+
 if __name__ == '__main__':    
     socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_address = ('localhost', 10000)
+    server_address = (SERVER_IP, SERVER_PORT)
     print('Conectando a {} puerto {}'.format(*server_address))
     socket_client.connect(server_address)
 
