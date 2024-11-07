@@ -13,22 +13,39 @@ if __name__ == '__main__':
     
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_address = (SERVER_IP, SERVER_PORT)
-    print('Iniciando en {} puerto {}'.format(*server_address))
+    #print('Iniciando en {} puerto {}'.format(*server_address))
+    
+    print('🚀 Servidor iniciado en {} puerto {}'.format(*server_address))    
     sock.bind(server_address)
     sock.listen(10)
 
     while True:
-        print('Esperando conexión...')
+        #print('Esperando conexión...')
+        
+
+        print('⏳ Esperando una conexión entrante...\n')
         connection, client_address = sock.accept()
-        print('Conectado a', client_address)
+        
+        #print('Conectado a', client_address)
+        
+
+        print(f'✅ Conexión establecida con {client_address}')
+
         try:
             while True:
                 data = connection.recv(1024)
                 if not data:
-                    print("El cliente se ha desconectado.")
+                    
+
+                    print("🔌 El cliente se ha desconectado.")
+                    #print("El cliente se ha desconectado.")
                     break
                 message = data.decode()
-                print('Mensaje recibido:', message)
+               
+                
+                print(f'📩 Mensaje recibido: "{message}"')
+
+                #print('Mensaje recibido:', message)
                 if message == 'estado':
                     respuesta = f'0,{ganancia_total},{num_viajes}'
                     connection.sendall(respuesta.encode())
@@ -57,7 +74,12 @@ if __name__ == '__main__':
                     respuesta = "Comando no reconocido"
                     connection.sendall(respuesta.encode())
         except Exception as e:
-            print('Error con el cliente:', e)
+            print(f'⚠️ Error con el cliente: {e}')
+
+            #print('Error con el cliente:', e)
         finally:
+
+            print("🔒 Cerrando conexión con el cliente.")
+
             connection.close()
 
