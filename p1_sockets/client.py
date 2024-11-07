@@ -5,7 +5,7 @@ import random
 from typing import Any
 
 
-SERVER_IP = 'localhost'
+SERVER_IP = '172.30.5.47'
 SERVER_PORT = 2020
 
 def connect_to_server() -> Any:
@@ -29,9 +29,9 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"Error connecting to server: {e}")
         exit()
-    
     print(" * Connected to server *")
     print("------------------------------------------\n")
+
     while True:
         print("Select an option:")
         print("\t1. Check status")
@@ -57,7 +57,18 @@ if __name__ == '__main__':
                 print(f"* Response: {response} *\n")
                 if int(response[0]) == 1:
                     print("\tRide in progress . . .\n")
+                    conn.close()
+                    
                     time.sleep(random.randint(3, 8))
+
+                    try: 
+                        conn = connect_to_server()
+                    except Exception as e:
+                        print(f"Error connecting to server: {e}")
+                        exit()
+                    print(" * Connected to server *")
+                    print("------------------------------------------\n")
+
                     conn.sendall(f"terminar,{response[1]}".encode())
                     print("\tRide finished\n")
                 elif int(response[0]) == -1:

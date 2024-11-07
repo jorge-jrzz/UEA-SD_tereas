@@ -5,7 +5,7 @@
 #include <arpa/inet.h> 
 #include <time.h> 
 
-#define SERVER_IP "localhost"
+#define SERVER_IP "172.30.5.47"
 #define SERVER_PORT 2020
 
 
@@ -112,7 +112,18 @@ int main() {
                 sscanf(response, "%d,%s", &status, viaje_id);
                 if (status == 1) {
                     printf("\tViaje en progreso . . .\n\n");
+                    close(socket_client);
+
                     pause_sleep((rand() % 6) + 3);
+
+                    // Conectar al servidor de nuevo
+                    if (connect_to_server(&socket_client) < 0) {
+                        printf("Error al conectar con el servidor.\n");
+                        return 1;
+                    }
+                    printf(" * Conectado al servidor *\n");
+                    printf("------------------------------------------\n\n");
+
                     char terminar_msg[1024];
                     sprintf(terminar_msg, "terminar,%s", viaje_id);
                     send(socket_client, terminar_msg, strlen(terminar_msg), 0);
