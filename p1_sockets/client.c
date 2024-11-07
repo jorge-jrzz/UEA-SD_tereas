@@ -89,11 +89,12 @@ int main() {
             send(socket_client, "estado", strlen("estado"), 0);
             if (get_response(socket_client, response) == 0) {
                 printf("* Respuesta: [%s] *\n\n", response);
+                int service;
                 int viajes;
-                int status;
+                // char viajes[20];
                 char ganancias[50];
-                sscanf(response, "%d,%49[^,]s,%d", &status, ganancias, &viajes);
-                if (viajes == 0) {
+                sscanf(response, "%d,%49[^,],%d", &service, ganancias, &viajes);
+                if (service == 0) {
                     printf("\tGanancias: $%s | Viajes: %d\n\n", ganancias, viajes);
                 } else {
                     printf("\tNo hay información disponible\n");

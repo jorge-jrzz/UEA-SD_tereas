@@ -45,7 +45,7 @@ if __name__ == '__main__':
                 response = get_response(conn)
                 print(f"* Response: {response} *\n")
                 if int(response[0]) == 0:
-                    print(f"\tEarnings: $ {response[1]} | Trips: {response[0]}\n")
+                    print(f"\tEarnings: $ {response[1]} | Trips: {response[2]}\n")
                 else:
                     print("\tNo information available")
                 conn.close()
