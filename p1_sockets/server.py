@@ -3,7 +3,7 @@ from uber import Uber
 import socket
 import random
 
-SERVER_IP = 'xxx.xxx.xxx.xxx'
+SERVER_IP = '0.0.0.0'
 SERVER_PORT = 2020
 
 if __name__ == '__main__': 
@@ -20,36 +20,44 @@ if __name__ == '__main__':
     sock.listen(10)
 
     print('Esperando una conexion...')
-    connection, client_address = sock.accept()
-    print('Conectado a', client_address)
+    # connection, client_address = sock.accept()
+    # print('Conectado a', client_address)
 
-    try:
-        while True:
-            data = connection.recv(1024)
-            if not data:
-                print("El cliente se ha desconectado.")
-                break
+    
 
-            print('Mensaje recibido:', data.decode())
+    while True:
+        print('Esperando conexion . . .')
+        connection, client_address = sock.accept()
+        print('Conectado a', client_address)
 
-            if data.decode() == 'estado':
-                respuesta = f'{ganancia_total},{num_viajes}'
-                connection.sendall(respuesta.encode())
-            elif data.decode() == 'viaje':
-                current_plate = -1
-                for uber in available_uber:
-                    if uber.is_available():
-                        uber.set_availability(False)
-                        current_plate = uber.get_plate()
-                        break
-                respuesta = f'{current_plate},{random.randint(23, 100)}'
-                connection.sendall(respuesta.encode())
-            elif data.decode().split(',')[0] == 'terminar':
-                available_uber[int(data.decode().split(',')[1])].set_availability(True)
-            else:
-                respuesta = "Comando no reconocido"
-                connection.sendall(respuesta.encode())
+        try:
+            while True:
+                data = connection.recv(1024)
+                if not data:
+                    print("El cliente se ha desconectado.")
+                    break
 
-    finally:
-        connection.close()
-
+                print('Mensaje recibido:', data.decode())
+    
+                if data.decode() == 'estado':
+                    respuesta = f'0,{ganancia_total},{num_viajes}'
+                    connection.sendall(respuesta.encode())
+                elif data.decode() == 'viaje':
+                    current_plate = -1
+                    for uber in available_uber:
+                        if uber.is_available():
+                            uber.set_availability(False)
+                            current_plate = uber.get_plate()
+                            break
+                    respuesta = f'1,{current_plate},{random.randint(23, 100)}'
+                    connection.sendall(respuesta.encode())
+                elif data.decode().split(',')[0] == 'terminar':
+                    available_uber[int(data.decode().split(',')[1])].set_availability(True)
+                else:
+                    respuesta = "Comando no reconocido"
+                    connection.sendall(respuesta.encode())
+        except Exception as e:
+            print('Error con el cliente: ', e)
+        finally:
+            connection.close()
+        
