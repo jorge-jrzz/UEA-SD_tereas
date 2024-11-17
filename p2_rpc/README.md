@@ -11,20 +11,20 @@ Esto hace que rpcgen procese el archivo de interfaz RPC (uber.x) y genere varios
 
 Archivos generados por rpcgen:
 
-```sh uber.h ```
+```uber.h ```
 
 Este archivo contiene las definiciones de estructuras y constantes derivadas de la especificación en uber.x.
 Propósito: Es el punto de referencia para los programas cliente y servidor para usar los datos y funciones definidos en la interfaz RPC.
 
-```sh uber_clnt.c ```
+```uber_clnt.c ```
 
 Contiene las implementaciones de las funciones que el cliente utilizará para llamar a los procedimientos remotos.
 Propósito: El cliente usa este archivo para comunicarse con el servidor.
 
-```sh uber_svc.c ```
+```uber_svc.c ```
 Contiene el código del lado del servidor, que incluye la lógica para recibir y procesar las solicitudes RPC.
 Propósito: El servidor usa este archivo para manejar las llamadas RPC.
 
-```sh uber_xdr.c ```
+```uber_xdr.c ```
 Contiene las funciones para serializar y deserializar los datos enviados entre el cliente y el servidor (codificación XDR - eXternal Data Representation).
 Propósito: Permite enviar datos en un formato independiente de la arquitectura de las máquinas cliente y servidor.
