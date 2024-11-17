@@ -3,6 +3,6 @@
 Para compilar el proyecto se usan los siguientes comandos:
 
 ### 1. Generar los 
-sh´´´
+```sh
 rpcgen -C uber.x
-´´´
+```
