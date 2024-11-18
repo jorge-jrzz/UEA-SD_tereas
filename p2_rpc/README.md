@@ -31,12 +31,23 @@ Propósito: Permite enviar datos en un formato independiente de la arquitectura 
 
 ### 1.1 Uso de Makefile
 Uso:
-Compila todo (cliente y servidor):
+Crea los archivos del cliente y del servidor con rpcgen:
 ```sh
-make
+make rpcgen
 ```
-Limpia los archivos generados:
+Compila los archivos del servidor:
+```sh
+make gcc_server
+```
+Compila los archivos del cliente:
+```sh
+make gcc_client
+```
+Empieza el servicio de rcpbind:
+```sh
+make start_service
+```
+Elimina los archivos generados por rpcgen:
 ```sh
 make clean
 ```
-
