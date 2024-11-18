@@ -39,4 +39,4 @@ Limpia los archivos generados:
 ```sh
 make clean
 ```
-Limpieza completa (incluye implementaciones):
+
