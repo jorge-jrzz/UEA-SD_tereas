@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>
+#include <time.h>
+
 
 float calcularDistancia(Posicion origen, Posicion destino) {
     float deltaX = destino.x - origen.x;
@@ -11,8 +13,10 @@ float calcularDistancia(Posicion origen, Posicion destino) {
 }
 
 void pasajero(CLIENT *clnt) {
+	srand(time(NULL));
     Posicion origen = {rand() % 51, rand() % 51};
     Posicion destino = {rand() % 51, rand() % 51};
+
     InfoAuto *info = solicitarviaje_1(&origen, clnt);
     if (info == NULL) {
         printf("No hay autos disponibles.\n");
@@ -20,8 +24,8 @@ void pasajero(CLIENT *clnt) {
     }
     float distancia = calcularDistancia(origen, destino);
     float costo = distancia * info->tarifa;
-    printf("Viaje asignado: Placa: %s, Tipo: %s, Costo: %.2f\n", info->placa, info->tipoUber, costo);
-
+printf("Viaje asignado: Placa: %s, Tipo: %s, Costo: %.2f\n", info->placa, info->tipoUber, costo);
+printf("Tiempo: %f\n", distancia);
     sleep(distancia);
 
     TerminarViajeArgs args;
@@ -30,10 +34,10 @@ void pasajero(CLIENT *clnt) {
     args.placas = strdup(info->placa); 
 
     void *result = terminarviaje_1(&args, clnt);
-    if (result == NULL) {
+    /*if (result == NULL) {
         clnt_perror(clnt, "Error al terminar el viaje");
         return;
-    }
+    }*/
 
     printf("Viaje terminado.\n");
 }
