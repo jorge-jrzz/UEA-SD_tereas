@@ -20,6 +20,7 @@ typedef struct {
 UberAuto autos[NUM_AUTOS];
 int viajes_realizados = 0;
 float ganancia_total = 0.0;
+bool cars = false; 
 
 // Inicializar autos en el servidor
 void inicializar_autos() {
@@ -41,6 +42,10 @@ float calcular_distancia(struct Posicion a, struct Posicion b) {
 
 // Implementación de SolicitarViaje
 InfoAuto *solicitarviaje_1_svc(Posicion *pos, struct svc_req *req) {
+    if (!cars) {
+        inicializar_autos();
+        cars = true;
+    }
     static InfoAuto respuesta;
     int encontrado = 0;
     float distancia_min = 1e9;
@@ -72,6 +77,10 @@ InfoAuto *solicitarviaje_1_svc(Posicion *pos, struct svc_req *req) {
 
 // Implementación de TerminarViaje
 void *terminarviaje_1_svc(TerminarViajeArgs *args, struct svc_req *req) {
+    if (!cars) {
+        inicializar_autos();
+        cars = true;
+    }
     for (int i = 0; i < NUM_AUTOS; i++) {
         if (strcmp(autos[i].placa, args->placas) == 0) {
             autos[i].disponible = 1;  // Marcar como disponible
@@ -87,6 +96,10 @@ void *terminarviaje_1_svc(TerminarViajeArgs *args, struct svc_req *req) {
 
 // Implementación de EstadoServicio
 EstadoServicio *estadoservicio_1_svc(void *argp, struct svc_req *req) {
+    if (!cars) {
+        inicializar_autos();
+        cars = true;
+    }
     static EstadoServicio estado;
     int autos_libres = 0;
 
@@ -95,7 +108,6 @@ EstadoServicio *estadoservicio_1_svc(void *argp, struct svc_req *req) {
             autos_libres++;
         }
     }
-
     estado.viajesRealizados = viajes_realizados;
     estado.autosLibres = autos_libres;
     estado.gananciaTotal = ganancia_total;

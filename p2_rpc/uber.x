@@ -4,7 +4,7 @@ struct Posicion {
 };
 
 struct InfoAuto {
-    Posicion posicion;
+    Posicion pos;
     string tipoUber<10>;
     float tarifa;
     string placa<10>;
@@ -19,7 +19,7 @@ struct EstadoServicio {
 
 struct Auto {
     int disponible;     /* 1: Disponible, 0: Ocupado */
-    Posicion posicion;
+    Posicion pos;
     string tipoUber<10>;
     float tarifa;
     string placa<10>;
