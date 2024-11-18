@@ -28,3 +28,15 @@ Propósito: El servidor usa este archivo para manejar las llamadas RPC.
 ```uber_xdr.c ```
 Contiene las funciones para serializar y deserializar los datos enviados entre el cliente y el servidor (codificación XDR - eXternal Data Representation).
 Propósito: Permite enviar datos en un formato independiente de la arquitectura de las máquinas cliente y servidor.
+
+### 1.1 Uso de Makefile
+Uso:
+Compila todo (cliente y servidor):
+```sh
+make
+```
+Limpia los archivos generados:
+```sh
+make clean
+```
+Limpieza completa (incluye implementaciones):
