@@ -18,7 +18,7 @@ struct EstadoServicio {
 
 
 struct Auto {
-    bool disponible;
+    int disponible;     /* 1: Disponible, 0: Ocupado */
     Posicion posicion;
     string tipoUber<10>;
     float tarifa;

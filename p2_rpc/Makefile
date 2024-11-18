@@ -15,26 +15,25 @@ SERVER_EXEC = server
 # Bandera de compilación
 CFLAGS = -I/usr/include/tirpc -ltirpc -lm
 
-# Reglas principales
-all: $(CLIENT_EXEC) $(SERVER_EXEC)
-
-# Regla para generar los archivos con rpcgen
-$(GEN_FILES): $(IDL_FILE)
+# Regla para crear archivos con rpcgen
+rpcgen:
 	rpcgen -C $(IDL_FILE)
 
+# Regla para compilar el servidor
+gcc_server:
+	@echo "compilando el servidor..."
+	gcc uber_svc.c uber_xdr.c $(SERVER_IMPL) $(CFLAGS) -o $(SERVER_EXEC)
+
 # Regla para compilar el cliente
-$(CLIENT_EXEC): $(GEN_FILES) $(CLIENT_IMPL)
+gcc_client:
+	@echo "compilando el cliente..."
 	gcc uber_clnt.c uber_xdr.c $(CLIENT_IMPL) $(CFLAGS) -o $(CLIENT_EXEC)
 
-# Regla para compilar el servidor
-$(SERVER_EXEC): $(GEN_FILES) $(SERVER_IMPL)
-	gcc uber_svc.c uber_xdr.c $(SERVER_IMPL) $(CFLAGS) -o $(SERVER_EXEC)
+# Regla para iniciar el servicio RPC y ejecutar el servidor
+start_service:
+	@echo "Iniciando rpcbind (si no está corriendo)..."
+	sudo systemctl start rpcbind
 
 # Limpieza de archivos generados y binarios
 clean:
 	rm -f $(CLIENT_EXEC) $(SERVER_EXEC) $(GEN_FILES)
-
-
-# Regla por defecto
-.PHONY: all clean
-

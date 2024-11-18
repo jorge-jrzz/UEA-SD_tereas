@@ -1,139 +1,103 @@
-#include "uber.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 #include <math.h>
+#include "uber.h" // Archivo generado por rpcgen
 
-#define N 8 // Número de autos
-/*
+// Definiciones globales
+#define NUM_AUTOS 8
+
 typedef struct {
-    bool disponible;
-    struct Posicion posicion;
-    char tipoUber[10];
-    float tarifa;
-    char placa[10];
-    float ganancias;
-} Auto;*/
+    int disponible;       // 1: Disponible, 0: Ocupado
+    struct Posicion pos;  // Posición del auto
+    char tipoUber[10];    // Tipo de Uber (UberPlanet, UberXL, UberBlack)
+    float tarifa;         // Tarifa por kilómetro
+    char placa[10];       // Placa del auto
+    float ganancias;      // Ganancias acumuladas
+} UberAuto;
 
-//Auto autos[N];
+// Lista de autos
+UberAuto autos[NUM_AUTOS];
+int viajes_realizados = 0;
+float ganancia_total = 0.0;
 
-
-Auto autos[N] = {
-    {true, {10, 20}, "UberPlanet", 15.0, "001ABC", 0.0},
-    {true, {30, 40}, "UberXL", 10.0, "002ABC", 0.0},
-    {true, {50, 60}, "UberBlack", 25.0, "003ABC", 0.0},
-    {true, {70, 80}, "UberXL", 20.0, "004ABC", 0.0},
-    {true, {90, 100}, "UberPlanet", 12.5, "005ABC", 0.0},
-    {true, {110, 120}, "UberBlack", 30.0, "006ABC", 0.0},
-    {true, {130, 140}, "UberPlanet", 18.0, "007ABC", 0.0},
-    {true, {150, 160}, "UberXL", 22.0, "008ABC", 0.0}
-};
-
-int viajesRealizados = 0;
-float gananciaTotal = 0.0;
-
-void inicializarAutos() {
-    const char *tipos[] = {"UberPlanet", "UberXL", "UberBlack"};
-    const float tarifas[] = {10.0, 15.0, 25.0};
-    for (int i = 0; i < N; i++) {
-        autos[i].disponible = true;
-        autos[i].posicion.x = rand() % 51;
-        autos[i].posicion.y = rand() % 51;
-        strcpy(autos[i].tipoUber, tipos[rand() % 3]);
-        autos[i].tarifa = tarifas[rand() % 3];
-        sprintf(autos[i].placa, "%03dABC", i + 1);
+// Inicializar autos en el servidor
+void inicializar_autos() {
+    for (int i = 0; i < NUM_AUTOS; i++) {
+        autos[i].disponible = 1;
+        autos[i].pos.x = rand() % 51;  // Coordenadas aleatorias [0, 50]
+        autos[i].pos.y = rand() % 51;
+        snprintf(autos[i].tipoUber, sizeof(autos[i].tipoUber), (i % 3 == 0) ? "UberBlack" : (i % 2 == 0) ? "UberXL" : "UberPlanet");
+        autos[i].tarifa = (strcmp(autos[i].tipoUber, "UberBlack") == 0) ? 25.0 : (strcmp(autos[i].tipoUber, "UberXL") == 0) ? 15.0 : 10.0;
+        snprintf(autos[i].placa, sizeof(autos[i].placa), "%03dABC", i);
         autos[i].ganancias = 0.0;
-
-        printf("Auto %d: Placa: %s, Tipo: %s, Tarifa: %.2f, Posición: (%d, %d)\n", 
-                i, autos[i].placa, autos[i].tipoUber, autos[i].tarifa, 
-                autos[i].posicion.x, autos[i].posicion.y);
-
-
     }
 }
 
-float calcularDistancia(struct Posicion a, struct Posicion b) {
-    return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
+// Función auxiliar para calcular la distancia entre dos posiciones
+float calcular_distancia(struct Posicion a, struct Posicion b) {
+    return sqrt(pow(b.x - a.x, 2) + pow(b.y - a.y, 2));
 }
 
-InfoAuto *solicitarviaje_1_svc(Posicion *posicionPasajero, struct svc_req *req) {
-    static InfoAuto info;
-    int mejorAuto = -1;
-    float menorDistancia = 1e9;
+// Implementación de SolicitarViaje
+InfoAuto *solicitarviaje_1_svc(Posicion *pos, struct svc_req *req) {
+    static InfoAuto respuesta;
+    int encontrado = 0;
+    float distancia_min = 1e9;
+    int auto_seleccionado = -1;
 
-
- if (posicionPasajero == NULL) {
-        fprintf(stderr, "Error: posicionPasajero es NULL\n");
-        return NULL;
-    }
-
-
-    for (int i = 0; i < N; i++) {
+    // Buscar el auto más cercano disponible
+    for (int i = 0; i < NUM_AUTOS; i++) {
         if (autos[i].disponible) {
-            /*float distancia = calcularDistancia(*posicionPasajero, autos[i].posicion);
-            if (distancia < menorDistancia) {
-                menorDistancia = distancia;
-                mejorAuto = i;
-                printf("Mejor auto: %d\n", mejorAuto);
-            }*/
-                mejorAuto = i;
-                printf("Mejor auto: %d\n", mejorAuto);
-                break;
+            float distancia = calcular_distancia(autos[i].pos, *pos);
+            if (distancia < distancia_min) {
+                distancia_min = distancia;
+                auto_seleccionado = i;
+                encontrado = 1;
+            }
         }
     }
 
-    if (mejorAuto == -1) {
-        printf("NO hay autos disponibles \n");
-        return NULL;
+    if (encontrado) {
+        autos[auto_seleccionado].disponible = 0;  // Marcar como ocupado
+        respuesta.pos = autos[auto_seleccionado].pos;
+        respuesta.tarifa = autos[auto_seleccionado].tarifa;
+        strcpy(respuesta.tipoUber, autos[auto_seleccionado].tipoUber);
+        strcpy(respuesta.placa, autos[auto_seleccionado].placa);
+        return &respuesta;
+    } else {
+        return NULL;  // No hay autos disponibles
     }
-    printf("DIsponible: 0 no - 1 si: %d \n", autos[mejorAuto].disponible);
-    autos[mejorAuto].disponible = false;
-    printf("DIsponible: 0 no - 1 si: %d \n", autos[mejorAuto].disponible);
-    info.posicion = autos[mejorAuto].posicion;
-
-    info.tipoUber = strdup(autos[mejorAuto].tipoUber);
-    printf("Tipo Uber: %s\n", info.tipoUber);
-    info.tarifa = autos[mejorAuto].tarifa;
-    info.placa = strdup(autos[mejorAuto].placa);
-    printf("Mejor Auto: %d\n", mejorAuto); 
-    return &info;
 }
 
+// Implementación de TerminarViaje
 void *terminarviaje_1_svc(TerminarViajeArgs *args, struct svc_req *req) {
-    static char dummy; 
-    Posicion posicionFinal = args->posicionFinal;
-    float costoViaje = args->costoViaje;
-    char *placas = args->placas;
-
-    printf("Viaje terminado.\n");
-    printf("Posicion final: (%d, %d)\n", posicionFinal.x, posicionFinal.y);
-    printf("Costo del viaje: %.2f\n", costoViaje);
-    printf("Placas: %s\n", placas);
-
-    for (int i = 0; i < N; i++) {
-        if (strcmp(autos[i].placa, placas) == 0) {
-            autos[i].disponible = true;
-            autos[i].posicion = posicionFinal;
-            autos[i].ganancias += costoViaje;
-            viajesRealizados++;
-            gananciaTotal += costoViaje;
+    for (int i = 0; i < NUM_AUTOS; i++) {
+        if (strcmp(autos[i].placa, args->placas) == 0) {
+            autos[i].disponible = 1;  // Marcar como disponible
+            autos[i].pos = args->posicionFinal;  // Actualizar posición
+            autos[i].ganancias += args->costoViaje;
+            ganancia_total += args->costoViaje;
+            viajes_realizados++;
             break;
         }
     }
-    return &dummy;
+    return NULL;
 }
 
+// Implementación de EstadoServicio
 EstadoServicio *estadoservicio_1_svc(void *argp, struct svc_req *req) {
     static EstadoServicio estado;
-    int libres = 0;
-    for (int i = 0; i < N; i++) {
-        if (autos[i].disponible) libres++;
+    int autos_libres = 0;
+
+    for (int i = 0; i < NUM_AUTOS; i++) {
+        if (autos[i].disponible) {
+            autos_libres++;
+        }
     }
 
-    estado.viajesRealizados = viajesRealizados;
-    estado.autosLibres = libres;
-    estado.gananciaTotal = gananciaTotal;
+    estado.viajesRealizados = viajes_realizados;
+    estado.autosLibres = autos_libres;
+    estado.gananciaTotal = ganancia_total;
     return &estado;
 }
-
