@@ -5,7 +5,7 @@
 #include <arpa/inet.h> 
 #include <time.h> 
 
-#define SERVER_IP "172.30.5.47"
+#define SERVER_IP "xxx.xxx.xxx.xxx"  // IP del servidor
 #define SERVER_PORT 2020
 
 

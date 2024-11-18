@@ -5,7 +5,7 @@ import random
 from typing import Any
 
 
-SERVER_IP = '172.30.5.47'
+SERVER_IP = 'xxx.xxx.xxx.xxx' # Replace with the server's IP
 SERVER_PORT = 2020
 
 def connect_to_server() -> Any:
