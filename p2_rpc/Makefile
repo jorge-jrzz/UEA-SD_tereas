@@ -16,9 +16,9 @@ SERVER_EXEC = server
 CFLAGS = -I/usr/include/tirpc -ltirpc -lm
 
 # Regla para instalar las dependecias en Ubuntu
-install:
+install_deps:
 	@echo "Instalando dependencias ..."
-	sudo apt install rpcsvc-proto rpcbind rpcinfo libtirpc-dev
+	sudo apt install rpcsvc-proto rpcbind libtirpc-dev
 
 # Regla para crear archivos con rpcgen
 rpcgen:
