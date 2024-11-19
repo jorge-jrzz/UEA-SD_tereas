@@ -29,6 +29,7 @@ def run():
     print("Will try to greet world ...")
 
     date = {'day': 1, 'month': 1, 'year': 2020}
+    days_to_sum = 65
 
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = helloworld_pb2_grpc.GreeterStub(channel)
@@ -41,6 +42,11 @@ def run():
         response = stub.GetNextDay(helloworld_pb2.NextDayRequest(day=date['day'], month=date['month'], year=date['year']))
         print(f"Fecha actual: {date['day']}/{date['month']}/{date['year']}")
         print(f"Fecha siguiente: {response.day}/{response.month}/{response.year}")
+
+        response = stub.SumDaysDate(helloworld_pb2.SumDaysRequest(day=date['day'], month=date['month'], year=date['year'], days=days_to_sum))
+        print("-" * 40)
+        print(f"Fecha actual: {date['day']}/{date['month']}/{date['year']}")
+        print(f"Sumando {days_to_sum} días: {response.day}/{response.month}/{response.year}")
 
 
 if __name__ == "__main__":

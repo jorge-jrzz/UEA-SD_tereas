@@ -33,6 +33,19 @@ class Greeter(helloworld_pb2_grpc.GreeterServicer):
         date = datetime(year=request.year, month=request.month, day=request.day)
         next_day = date + timedelta(days=1)
         return helloworld_pb2.NextDayReply(day=next_day.day, month=next_day.month, year=next_day.year)
+    
+    def SumDaysDate(self, request, context):
+        current_date = {'day': request.day, 'month': request.month, 'year': request.year}
+        for _ in range(request.days):
+            next_date = self.GetNextDay(
+                helloworld_pb2.NextDayRequest(
+                    day=current_date['day'], 
+                    month=current_date['month'], 
+                    year=current_date['year']
+                ), 
+                context)
+            current_date = {'day': next_date.day, 'month': next_date.month, 'year': next_date.year}
+        return helloworld_pb2.NextDayReply(day=next_date.day, month=next_date.month, year=next_date.year)
 
 
 def serve():

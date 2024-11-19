@@ -29,6 +29,8 @@ service Greeter {
   rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
 
   rpc GetNextDay (NextDayRequest) returns (NextDayReply) {}
+
+  rpc SumDaysDate (SumDaysRequest) returns (NextDayReply) {}
 }
 
 // The request message containing the user's name.
@@ -53,4 +55,12 @@ message NextDayReply {
   int32 day = 1;
   int32 month = 2;
   int32 year = 3;
+}
+
+// The request to sum days to a date
+message SumDaysRequest {
+  int32 day = 1;
+  int32 month = 2;
+  int32 year = 3;
+  int32 days = 4;
 }
