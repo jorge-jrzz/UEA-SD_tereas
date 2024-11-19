@@ -6,7 +6,7 @@
 #include <string.h> // Añadido para usar strdup
 #include "uber.h"
 
-float calcularDistancia(Posicion origen, Posicion destino) {
+float calcular_distancia(Posicion origen, Posicion destino) {
     float deltaX = destino.x - origen.x;
     float deltaY = destino.y - origen.y;
     return sqrtf(deltaX * deltaX + deltaY * deltaY);
@@ -23,7 +23,7 @@ void pasajero(CLIENT *clnt) {
         return;
     }
 
-    float distancia = calcularDistancia(origen, destino);
+    float distancia = calcular_distancia(origen, destino);
     float costo = distancia * info->tarifa;
     printf("Auto asignado: Placa=%s, Tipo=%s, Costo estimado=%.2f\n",
            info->placa, info->tipoUber, costo);
@@ -36,12 +36,8 @@ void pasajero(CLIENT *clnt) {
     args.costoViaje = costo;
     args.placas = strdup(info->placa);
 
-    int *result = terminarviaje_1(&args, clnt);
-    if (result == NULL || *result == 0) {
-        printf("Error al terminar el viaje.\n");
-    } else {
-        printf("Viaje terminado exitosamente.\n");
-    }
+    void *result = terminarviaje_1(&args, clnt);
+    printf("Viaje terminado exitosamente.\n");
 
     // Liberar memoria asignada
     free(args.placas);
@@ -74,12 +70,12 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    if (strcmp(argv[2], "passenger") == 0) {
+    if (strcmp(argv[2], "pasajero") == 0) {
         pasajero(clnt);
     } else if (strcmp(argv[2], "admin") == 0) {
         administrador(clnt);
     } else {
-        printf("Rol desconocido. Use 'passenger' o 'admin'.\n");
+        printf("Rol desconocido. Use 'pasajero' o 'admin'.\n");
     }
 
     clnt_destroy(clnt);

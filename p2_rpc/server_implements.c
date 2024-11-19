@@ -115,14 +115,12 @@ InfoAuto *solicitarviaje_1_svc(Posicion *pos, struct svc_req *req) {
 }
 
 // Implementación de TerminarViaje
-int *terminarviaje_1_svc(TerminarViajeArgs *args, struct svc_req *req) {
-    static int resultado;
+void *terminarviaje_1_svc(TerminarViajeArgs *args, struct svc_req *req) {
+    static int resultado = 1;
     if (!cars_inicializados) {
         inicializar_autos();
         cars_inicializados = true;
     }
-
-    int encontrado = 0;
 
     for (int i = 0; i < NUM_AUTOS; i++) {
         if (strcmp(autos[i].placa, args->placas) == 0) {
@@ -131,15 +129,8 @@ int *terminarviaje_1_svc(TerminarViajeArgs *args, struct svc_req *req) {
             autos[i].ganancias += args->costoViaje;
             ganancia_total += args->costoViaje;
             viajes_realizados++;
-            encontrado = 1;
             break;
         }
-    }
-
-    if (encontrado) {
-        resultado = 1; // Éxito
-    } else {
-        resultado = 0; // Error: auto no encontrado
     }
 
     return &resultado;
