@@ -27,6 +27,8 @@ service Greeter {
   rpc SayHello (HelloRequest) returns (HelloReply) {}
 
   rpc SayHelloAgain (HelloRequest) returns (HelloReply) {}
+
+  rpc GetNextDay (NextDayRequest) returns (NextDayReply) {}
 }
 
 // The request message containing the user's name.
@@ -37,4 +39,18 @@ message HelloRequest {
 // The response message containing the greetings
 message HelloReply {
   string message = 1;
+}
+
+// The request to get the next date
+message NextDayRequest {
+  int32 day = 1;
+  int32 month = 2;
+  int32 year = 3;
+}
+
+// The response containing the next date
+message NextDayReply {
+  int32 day = 1;
+  int32 month = 2;
+  int32 year = 3;
 }

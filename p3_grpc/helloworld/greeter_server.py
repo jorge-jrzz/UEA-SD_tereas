@@ -13,6 +13,7 @@
 # limitations under the License.
 """The Python implementation of the GRPC helloworld.Greeter server."""
 
+from datetime import datetime, timedelta
 from concurrent import futures
 import logging
 
@@ -27,6 +28,11 @@ class Greeter(helloworld_pb2_grpc.GreeterServicer):
     
     def SayHelloAgain(self, request, context):
         return helloworld_pb2.HelloReply(message=f"Hello again, {request.name}!")
+    
+    def GetNextDay(self, request, context):
+        date = datetime(year=request.year, month=request.month, day=request.day)
+        next_day = date + timedelta(days=1)
+        return helloworld_pb2.NextDayReply(day=next_day.day, month=next_day.month, year=next_day.year)
 
 
 def serve():

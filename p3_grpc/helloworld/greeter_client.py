@@ -27,12 +27,20 @@ def run():
     # used in circumstances in which the with statement does not fit the needs
     # of the code.
     print("Will try to greet world ...")
+
+    date = {'day': 1, 'month': 1, 'year': 2020}
+
     with grpc.insecure_channel('localhost:50051') as channel:
         stub = helloworld_pb2_grpc.GreeterStub(channel)
         response = stub.SayHello(helloworld_pb2.HelloRequest(name='you'))
         print("Greeter client received: " + response.message)
         response = stub.SayHelloAgain(helloworld_pb2.HelloRequest(name='you'))
         print("Greeter client received: " + response.message)
+        
+        # Servicios de manipulación de fechas
+        response = stub.GetNextDay(helloworld_pb2.NextDayRequest(day=date['day'], month=date['month'], year=date['year']))
+        print(f"Fecha actual: {date['day']}/{date['month']}/{date['year']}")
+        print(f"Fecha siguiente: {response.day}/{response.month}/{response.year}")
 
 
 if __name__ == "__main__":
