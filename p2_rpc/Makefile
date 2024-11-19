@@ -15,6 +15,11 @@ SERVER_EXEC = server
 # Bandera de compilación
 CFLAGS = -I/usr/include/tirpc -ltirpc -lm
 
+# Regla para instalar las dependecias en Ubuntu
+install:
+	@echo "Instalando dependencias ..."
+	sudo apt install rpcsvc-proto rpcbind rpcinfo libtirpc-dev
+
 # Regla para crear archivos con rpcgen
 rpcgen:
 	rpcgen -C $(IDL_FILE)

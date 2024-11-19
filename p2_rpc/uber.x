@@ -5,7 +5,7 @@ struct Posicion {
 
 struct InfoAuto {
     Posicion pos;
-    string tipoUber<10>;
+    string tipoUber<15>;
     float tarifa;
     string placa<10>;
 };
@@ -16,29 +16,16 @@ struct EstadoServicio {
     float gananciaTotal;
 };
 
-
-struct Auto {
-    int disponible;     /* 1: Disponible, 0: Ocupado */
-    Posicion pos;
-    string tipoUber<10>;
-    float tarifa;
-    string placa<10>;
-    float ganancias;
-};
-
-
 struct TerminarViajeArgs {
     Posicion posicionFinal;
     float costoViaje;
     string placas<10>;
 };
 
-
 program UBER_PROG {
     version UBER_VERS {
         InfoAuto SolicitarViaje(Posicion) = 1;
-        void TerminarViaje(TerminarViajeArgs) = 2;
-        EstadoServicio estadoServicio(void) = 3;
+        int TerminarViaje(TerminarViajeArgs) = 2;
+        EstadoServicio EstadoServicio(void) = 3;
     } = 1;
 } = 0x20000001;
-
