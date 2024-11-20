@@ -36,9 +36,16 @@ class Shooting(shooting_pb2_grpc.ShootingServicer):
         except Exception as e:
             raise Exception(f"Calculation error: {e}")
         shoot_distance = self.target_center - distance
-        self.user_shoots.append(shoot_distance)
-        return shooting_pb2.DisparaReply(shoot_distance=shoot_distance)
-
+        self.user_shoots.append({'username': request.username, 'distance': shoot_distance})
+        is_winner = True if abs(shoot_distance) <= 1 else False
+        return shooting_pb2.DisparaReply(shoot_distance=shoot_distance, is_winner=is_winner)
+    
+    def MejorDisparo(self, request, context):
+        if len(self.user_shoots) == 0:
+            return shooting_pb2.BestShotReply(username="No hay disparos")
+        else:
+            best_shot = min(self.user_shoots, key=lambda x: abs(x['distance']))
+            return shooting_pb2.BestShotReply(username=best_shot['username'])
 
 
 def serve():

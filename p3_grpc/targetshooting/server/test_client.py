@@ -16,6 +16,13 @@ def run():
         print("Distancia random {}".format(response.distance))
         response = stub.DisparaCannon(shooting_pb2.DisparaRequest(username="juanito", angle=45, speed=100))
         print(f"Respuesta: {response.shoot_distance:.2f}")
+        response = stub.DisparaCannon(shooting_pb2.DisparaRequest(username="jorge", angle=5, speed=12))
+        print(f"Respuesta: {response.shoot_distance:.2f}")
+        response = stub.DisparaCannon(shooting_pb2.DisparaRequest(username="octavio", angle=19, speed=20))
+        print(f"Respuesta: {response.shoot_distance:.2f}")
+
+        response = stub.MejorDisparo(Empty())
+        print(f"Mejor disparo realizado por: {response.username}")
 
 
 if __name__ == "__main__":

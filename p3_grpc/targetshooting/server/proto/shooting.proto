@@ -8,6 +8,8 @@ service Shooting {
   rpc DimeCentroDiana (google.protobuf.Empty) returns (CentroReply) {}
 
   rpc DisparaCannon (DisparaRequest) returns (DisparaReply) {}  
+
+  rpc MejorDisparo (google.protobuf.Empty) returns (BestShotReply) {}
 }
 
 message CentroReply {
@@ -22,4 +24,9 @@ message DisparaRequest {
 
 message DisparaReply {
   float shoot_distance = 1;
+  bool is_winner = 2;
+}
+
+message BestShotReply {
+  string username = 1;
 }
