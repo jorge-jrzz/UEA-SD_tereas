@@ -14,6 +14,8 @@ def run():
         stub = shooting_pb2_grpc.ShootingStub(channel)
         response = stub.DimeCentroDiana(Empty())
         print("Distancia random {}".format(response.distance))
+        response = stub.DisparaCannon(shooting_pb2.DisparaRequest(username="juanito", angle=45, speed=100))
+        print(f"Respuesta: {response.shoot_distance:.2f}")
 
 
 if __name__ == "__main__":
