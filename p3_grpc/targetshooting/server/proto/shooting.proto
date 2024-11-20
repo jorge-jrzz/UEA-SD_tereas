@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package targetshooting;
+
+import "google/protobuf/empty.proto";
+
+service Shooting {
+  rpc DimeCentroDiana (google.protobuf.Empty) returns (CentroReply) {}
+}
+
+message CentroReply {
+  int32 distance = 1;
+}
