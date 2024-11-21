@@ -15,20 +15,22 @@ class Shooting(shooting_pb2_grpc.ShootingServicer):
 
     @staticmethod
     def _calculate_distance(v, t):
+        print(f"💫 Calculating distance with speed={v} and angle={t}")
+        print("-" * 35)
         g = 9.81
-        
         # Validar que el ángulo esté dentro del rango permitido
         if t < 0 or t > math.pi / 2:
             raise ValueError("El ángulo t debe estar entre 0 y π/2 radianes. (0° - 90°)")
-        
         # Calcular distancia
         d = (v ** 2) * math.sin(2 * t) / g
         return d
 
     def DimeCentroDiana(self, request, context):
+        print("📍 Returning target center")
         return shooting_pb2.CentroReply(distance=self.target_center)
     
     def DisparaCannon(self, request, context):
+        print(f"🎯 Received shooting request from {request.username}")
         try:
             speed = request.speed
             angle = math.radians(request.angle)
@@ -41,6 +43,7 @@ class Shooting(shooting_pb2_grpc.ShootingServicer):
         return shooting_pb2.DisparaReply(shoot_distance=shoot_distance, is_winner=is_winner)
     
     def MejorDisparo(self, request, context):
+        print("🥇 Returning best shot")
         if len(self.user_shoots) == 0:
             return shooting_pb2.BestShotReply(username="No hay disparos")
         else:
