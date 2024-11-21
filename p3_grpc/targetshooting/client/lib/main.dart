@@ -1,125 +1,205 @@
 import 'package:flutter/material.dart';
+import 'package:client_rpc/generated/google/protobuf/empty.pb.dart';
+import 'package:client_rpc/generated/shooting.pbgrpc.dart';
+import 'package:grpc/grpc.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ShootingApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ShootingApp extends StatelessWidget {
+  // Constructor con key
+  const ShootingApp({super.key}); // Uso de super.key
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+      debugShowCheckedModeBanner: false,
+      title: 'Save Humanity - Cannon Shooter',
+      theme: ThemeData.dark().copyWith(
+        primaryColor: Colors.teal,
+        scaffoldBackgroundColor: Colors.black,
+        textTheme: ThemeData.dark().textTheme.apply(
+              fontFamily: 'Roboto',
+            ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const ShootingScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
+class ShootingScreen extends StatefulWidget {
+  const ShootingScreen({super.key}); // Uso de super.key
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ShootingScreenState createState() => ShootingScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class ShootingScreenState extends State<ShootingScreen> {
+  final ClientChannel channel = ClientChannel(
+    '172.18.49.133',
+    port: 50051,
+    options: const ChannelOptions(
+      credentials: ChannelCredentials.insecure(),
+    ),
+  );
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  late ShootingClient stub;
+  String log = 'Initializing connection...\n';
+  String bestShot = '';
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _angleController = TextEditingController();
+  final TextEditingController _speedController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    stub = ShootingClient(channel);
+    _fetchInitialData();
+  }
+
+  Future<void> _fetchInitialData() async {
+    try {
+      final responseCentro = await stub.dimeCentroDiana(Empty());
+      setState(() {
+        log += 'Random Distance to Center: ${responseCentro.distance}\n';
+      });
+    } catch (e) {
+      setState(() {
+        log += 'Error fetching center: $e\n';
+      });
+    }
+  }
+
+  Future<void> _shootCannon() async {
+    final username = _usernameController.text.trim();
+    final angle = double.tryParse(_angleController.text.trim());
+    final speed = double.tryParse(_speedController.text.trim());
+
+    if (username.isEmpty || angle == null || speed == null) {
+      setState(() {
+        log += 'Error: Invalid input.\n';
+      });
+      return;
+    }
+
+    try {
+      final response = await stub.disparaCannon(
+        DisparaRequest(
+            username: username, angle: angle.toInt(), speed: speed.toInt()),
+      );
+      setState(() {
+        log +=
+            'Shot by $username | Angle: $angle° | Speed: $speed | Distance: ${response.shootDistance.toStringAsFixed(2)}\n';
+      });
+    } catch (e) {
+      setState(() {
+        log += 'Error: $e\n';
+      });
+    }
+  }
+
+  Future<void> _fetchBestShot() async {
+    try {
+      final response = await stub.mejorDisparo(Empty());
+      setState(() {
+        bestShot = 'Best Shot: ${response.username}';
+      });
+    } catch (e) {
+      setState(() {
+        bestShot = 'Error fetching best shot: $e';
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: const Text('Cannon Shooter'),
+        centerTitle: true,
+        backgroundColor: Colors.teal,
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             const Text(
-              'You have pushed the button this many times:',
+              'Hello Humanity 🗿',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
+            const SizedBox(height: 20),
+            TextField(
+              controller: _usernameController,
+              decoration: const InputDecoration(
+                labelText: 'Username',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _angleController,
+              decoration: const InputDecoration(
+                labelText: 'Angle (°)',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _speedController,
+              decoration: const InputDecoration(
+                labelText: 'Speed',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 20),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _shootCannon,
+                    child: const Text('Shoot Cannon'),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: _fetchBestShot,
+                    child: const Text('Best Shot'),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
             Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+              bestShot,
+              style: const TextStyle(fontSize: 18, color: Colors.tealAccent),
+            ),
+            const SizedBox(height: 20),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Text(
+                  log,
+                  style:
+                      const TextStyle(fontFamily: 'RobotoMono', fontSize: 14),
+                ),
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _angleController.dispose();
+    _speedController.dispose();
+    channel.shutdown();
+    super.dispose();
   }
 }
