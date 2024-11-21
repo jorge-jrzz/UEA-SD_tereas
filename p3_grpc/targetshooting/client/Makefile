@@ -6,7 +6,7 @@ GEN_DIR = lib/src/generated
 
 # Regla para actualizar el codigo generado por gRPC
 grpc:
-	protoc --dart_out=grpc:lib/src/generated -$(PROTO_DIR) $(PROTO_FILE)
+	protoc --dart_out=grpc:lib/src/generated -I$(PROTO_DIR) $(PROTO_FILE)
 
 # Regla para eliminar archivos generados por gRPC
 clean:

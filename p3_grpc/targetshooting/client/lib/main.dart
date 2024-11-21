@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:client_rpc/generated/google/protobuf/empty.pb.dart';
-import 'package:client_rpc/generated/shooting.pbgrpc.dart';
 import 'package:grpc/grpc.dart';
+import 'package:client/src/generated/shooting.pbgrpc.dart';
+import 'package:client/src/generated/google/protobuf/empty.pb.dart';
 
 void main() {
   runApp(const ShootingApp());
@@ -36,7 +38,7 @@ class ShootingScreen extends StatefulWidget {
 
 class ShootingScreenState extends State<ShootingScreen> {
   final ClientChannel channel = ClientChannel(
-    '172.18.49.133',
+    '172.18.58.15',
     port: 50051,
     options: const ChannelOptions(
       credentials: ChannelCredentials.insecure(),
