@@ -1,4 +1,4 @@
-from UberService import RideServiceServicer
+from UberService import UberService
 
 from protos import ride_service_pb2
 from protos import ride_service_pb2_grpc

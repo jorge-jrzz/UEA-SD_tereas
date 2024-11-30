@@ -1,7 +1,7 @@
 import grpc
 from protos import ride_service_pb2
 from protos import ride_service_pb2_grpc
-
+import time
 def run():
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = ride_service_pb2_grpc.RideServiceStub(channel)
@@ -32,6 +32,7 @@ def run():
                 print(f"Success: {ride_response.success}")
                 print(f"Message: {ride_response.message}")
                 print(f"Estimated Time: {ride_response.estimated_time}")
+                time.sleep(int(ride_response.estimated_time))
 
 if __name__ == "__main__":
     run()
