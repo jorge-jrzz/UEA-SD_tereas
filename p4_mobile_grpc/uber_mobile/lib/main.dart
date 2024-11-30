@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'src/pages/ride_info_screen.dart';
+import 'src/pages/ride_info_screen.dart' show RideInfoScreen;
+import 'src/pages/administrator_screen.dart' show AdministratorScreen;
 import 'src/widgets/button.dart';
 
 void main() {
@@ -102,9 +103,9 @@ class _HomePageState extends State<HomePage> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 RideInfoScreen(
-                                              rideOption:
-                                                  selectedOption ?? 'N/A',
-                                            ),
+                                                  rideOption:
+                                                      selectedOption ?? 'N/A',
+                                                ),
                                           ),
                                         );
                                       },
@@ -119,7 +120,17 @@ class _HomePageState extends State<HomePage> {
                       ButtonFuntion(
                           text: 'Información del servicio',
                           color: Colors.black,
-                          onPressed: () {}),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AdministratorScreen(
+                                  rideOption:
+                                    selectedOption ?? 'N/A',
+                                  ),
+                                ),
+                            );
+                          }),
                     ]),
               ],
             ),
