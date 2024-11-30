@@ -9,6 +9,9 @@ service RideService {
 
     // Solicitar un viaje
     rpc RequestRide (RideRequest) returns (RideResponse);
+
+    // Finalizar un viaje
+    rpc EndRide (EndRideRequest) returns (EndRideResponse);
 }
 
 // Mensajes
@@ -30,5 +33,15 @@ message RideRequest {
 message RideResponse {
     bool success = 1;
     string message = 2;
-    string estimated_time = 3;
+    string plate = 3;
+    string estimated_time = 4;
+}
+
+message EndRideRequest {
+    string plate = 1;
+}
+
+message EndRideResponse {
+    bool success = 1;
+    string message = 2;
 }

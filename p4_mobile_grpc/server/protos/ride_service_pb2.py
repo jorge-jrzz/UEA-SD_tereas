@@ -13,7 +13,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19protos/ride_service.proto\x12\x04ride\"\x0e\n\x0c\x45mptyRequest\"L\n\x0bServiceInfo\x12\x16\n\x0e\x61vailable_cars\x18\x01 \x01(\x05\x12\x13\n\x0btotal_trips\x18\x02 \x01(\x05\x12\x10\n\x08\x65\x61rnings\x18\x03 \x01(\x02\"d\n\x0bRideRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x11\n\tride_type\x18\x02 \x01(\t\x12\x17\n\x0fpickup_location\x18\x03 \x01(\t\x12\x18\n\x10\x64ropoff_location\x18\x04 \x01(\t\"H\n\x0cRideResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\x16\n\x0e\x65stimated_time\x18\x03 \x01(\t2|\n\x0bRideService\x12\x37\n\x0eGetServiceInfo\x12\x12.ride.EmptyRequest\x1a\x11.ride.ServiceInfo\x12\x34\n\x0bRequestRide\x12\x11.ride.RideRequest\x1a\x12.ride.RideResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19protos/ride_service.proto\x12\x04ride\"\x0e\n\x0c\x45mptyRequest\"L\n\x0bServiceInfo\x12\x16\n\x0e\x61vailable_cars\x18\x01 \x01(\x05\x12\x13\n\x0btotal_trips\x18\x02 \x01(\x05\x12\x10\n\x08\x65\x61rnings\x18\x03 \x01(\x02\"d\n\x0bRideRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\t\x12\x11\n\tride_type\x18\x02 \x01(\t\x12\x17\n\x0fpickup_location\x18\x03 \x01(\t\x12\x18\n\x10\x64ropoff_location\x18\x04 \x01(\t\"W\n\x0cRideResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\x12\r\n\x05plate\x18\x03 \x01(\t\x12\x16\n\x0e\x65stimated_time\x18\x04 \x01(\t\"\x1f\n\x0e\x45ndRideRequest\x12\r\n\x05plate\x18\x01 \x01(\t\"3\n\x0f\x45ndRideResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\xb4\x01\n\x0bRideService\x12\x37\n\x0eGetServiceInfo\x12\x12.ride.EmptyRequest\x1a\x11.ride.ServiceInfo\x12\x34\n\x0bRequestRide\x12\x11.ride.RideRequest\x1a\x12.ride.RideResponse\x12\x36\n\x07\x45ndRide\x12\x14.ride.EndRideRequest\x1a\x15.ride.EndRideResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -28,7 +28,11 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_RIDEREQUEST']._serialized_start=129
   _globals['_RIDEREQUEST']._serialized_end=229
   _globals['_RIDERESPONSE']._serialized_start=231
-  _globals['_RIDERESPONSE']._serialized_end=303
-  _globals['_RIDESERVICE']._serialized_start=305
-  _globals['_RIDESERVICE']._serialized_end=429
+  _globals['_RIDERESPONSE']._serialized_end=318
+  _globals['_ENDRIDEREQUEST']._serialized_start=320
+  _globals['_ENDRIDEREQUEST']._serialized_end=351
+  _globals['_ENDRIDERESPONSE']._serialized_start=353
+  _globals['_ENDRIDERESPONSE']._serialized_end=404
+  _globals['_RIDESERVICE']._serialized_start=407
+  _globals['_RIDESERVICE']._serialized_end=587
 # @@protoc_insertion_point(module_scope)

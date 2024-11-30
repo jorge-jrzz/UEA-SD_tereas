@@ -24,6 +24,11 @@ class RideServiceStub(object):
                 request_serializer=protos_dot_ride__service__pb2.RideRequest.SerializeToString,
                 response_deserializer=protos_dot_ride__service__pb2.RideResponse.FromString,
                 )
+        self.EndRide = channel.unary_unary(
+                '/ride.RideService/EndRide',
+                request_serializer=protos_dot_ride__service__pb2.EndRideRequest.SerializeToString,
+                response_deserializer=protos_dot_ride__service__pb2.EndRideResponse.FromString,
+                )
 
 
 class RideServiceServicer(object):
@@ -43,6 +48,13 @@ class RideServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def EndRide(self, request, context):
+        """Finalizar un viaje
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_RideServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -55,6 +67,11 @@ def add_RideServiceServicer_to_server(servicer, server):
                     servicer.RequestRide,
                     request_deserializer=protos_dot_ride__service__pb2.RideRequest.FromString,
                     response_serializer=protos_dot_ride__service__pb2.RideResponse.SerializeToString,
+            ),
+            'EndRide': grpc.unary_unary_rpc_method_handler(
+                    servicer.EndRide,
+                    request_deserializer=protos_dot_ride__service__pb2.EndRideRequest.FromString,
+                    response_serializer=protos_dot_ride__service__pb2.EndRideResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -97,5 +114,22 @@ class RideService(object):
         return grpc.experimental.unary_unary(request, target, '/ride.RideService/RequestRide',
             protos_dot_ride__service__pb2.RideRequest.SerializeToString,
             protos_dot_ride__service__pb2.RideResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def EndRide(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ride.RideService/EndRide',
+            protos_dot_ride__service__pb2.EndRideRequest.SerializeToString,
+            protos_dot_ride__service__pb2.EndRideResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

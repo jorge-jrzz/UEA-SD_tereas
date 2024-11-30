@@ -2,15 +2,16 @@ import grpc
 from protos import ride_service_pb2
 from protos import ride_service_pb2_grpc
 import time
+
 def run():
     with grpc.insecure_channel("localhost:50051") as channel:
         stub = ride_service_pb2_grpc.RideServiceStub(channel)
 
-
-        while 1:
+        while True:
             print("UBER")
             print("1. Informacion del viaje")
             print("2. Solicitar viaje")
+            print("3. Finalizar viaje")
             option = int(input("Selecciona una opcion: "))
             if option == 1:
                 # Obtener información del servicio
@@ -31,8 +32,24 @@ def run():
                 print("\nRide Request Response:")
                 print(f"Success: {ride_response.success}")
                 print(f"Message: {ride_response.message}")
+                print(f"Plate: {ride_response.plate}")
                 print(f"Estimated Time: {ride_response.estimated_time}")
                 time.sleep(int(ride_response.estimated_time))
+                plate = ride_response.plate
+                end_request = ride_service_pb2.EndRideRequest(plate=plate)
+                end_response = stub.EndRide(end_request)
+                print("\nEnd Ride Response:")
+                print(f"Success: {end_response.success}")
+                print(f"Message: {end_response.message}")
+
+            elif option == 3:
+                # Finalizar un viaje
+                plate = input("Ingresa la placa del vehículo: ")
+                end_request = ride_service_pb2.EndRideRequest(plate=plate)
+                end_response = stub.EndRide(end_request)
+                print("\nEnd Ride Response:")
+                print(f"Success: {end_response.success}")
+                print(f"Message: {end_response.message}")
 
 if __name__ == "__main__":
     run()
