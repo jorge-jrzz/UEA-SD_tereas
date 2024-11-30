@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/button.dart';
 
 class RideInfoScreen extends StatelessWidget {
   final String rideOption; // Recibe la opción del viaje seleccionado
@@ -33,20 +34,12 @@ class RideInfoScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                // Regresa a la pantalla principal
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-                backgroundColor: Colors.black,
-              ),
-              child: const Text(
-                'Solicitar otro viaje',
-                style: TextStyle(fontSize: 18, color: Colors.white),
-              ),
-            ),
+            ButtonFuntion(
+                text: 'Solicitar otro viaje',
+                color: Colors.black,
+                onPressed: () {
+                  Navigator.pop(context);
+                })
           ],
         ),
       ),
