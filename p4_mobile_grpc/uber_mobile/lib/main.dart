@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'ride_info_screen.dart';
+import 'src/widgets/button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,7 +36,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Image.asset('assets/images/uber_logo.png', height: 30.0,), 
+        title: Image.asset(
+          'assets/images/uber_logo.png',
+          height: 25.0,
+        ),
         centerTitle: true,
       ),
       body: Column(
@@ -45,9 +49,9 @@ class _HomePageState extends State<HomePage> {
             flex: 1,
             child: FlutterMap(
               options: MapOptions(
-                initialCenter:
-                    LatLng(19.352914157905914, -99.28245393774077), // UAM Cuajimalpa
-                initialZoom: 16.0,
+                initialCenter: LatLng(
+                    19.352914157905914, -99.28245393774077), // UAM Cuajimalpa
+                initialZoom: 16.7,
               ),
               children: [
                 TileLayer(
@@ -62,68 +66,58 @@ class _HomePageState extends State<HomePage> {
             flex: 1,
             child: Column(
               children: [
-                const SizedBox(height: 10),
+                // const SizedBox(height: 10),
                 _buildOptionButton(
-                  'assets/images/uber_planet.png',
-                  'UberPlanet', 
-                  '\$10 x km'),
+                    'assets/images/uber_planet.png', 'UberPlanet', '\$10 x km'),
                 _buildOptionButton(
-                  'assets/images/uber_xl.png', 
-                  'UberXL', 
-                  '\$15 x km'),
+                    'assets/images/uber_xl.png', 'Uber XL', '\$15 x km'),
                 _buildOptionButton(
-                  'assets/images/uber_black.png', 
-                  'UberBlack', 
-                  '\$25 x km'),
+                    'assets/images/uber_black.png', 'Uber Black', '\$25 x km'),
                 const Spacer(),
-                if (selectedOption != null)
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // Muestra el dialogo de confirmación
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Confirmación'),
-                                  content: Text('Has solicitado un viaje en $selectedOption'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop(); // Cerrar el diálogo
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => RideInfoScreen(
-                                              rideOption: selectedOption ?? 'N/A',
-                                            ),
+
+                Column(
+                    // padding: const EdgeInsets.all(16.0),
+                    children: [
+                      ButtonFuntion(
+                        text: 'Información del servicio',
+                        color: Colors.black,
+                        onPressed: () {
+                          // Muestra el dialogo de confirmación
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Confirmación'),
+                                content: Text(
+                                    'Has solicitado un viaje en $selectedOption'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Cerrar el diálogo
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => RideInfoScreen(
+                                            rideOption: selectedOption ?? 'N/A',
                                           ),
-                                        );
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            padding: const EdgeInsets.symmetric(vertical: 14.0),
-                            backgroundColor: Colors.blue[600],
-                          ),
-                          child: const Text(
-                            'Solicitar viaje',
-                            style: TextStyle(
-                              fontSize: 16, 
-                              fontWeight: FontWeight.bold, 
-                              color: Colors.white),
-                          ),
-                        ),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text('OK'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
                       ),
-                  ),
+                      if (selectedOption != null)
+                        ButtonFuntion(
+                            text: 'Solicitar viaje',
+                            color: Colors.blue[600]!,
+                            onPressed: () {}),
+                    ]),
               ],
             ),
           ),
