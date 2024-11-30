@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'ride_info_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,13 +12,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Uber Clone',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const HomePage(),
+      home: HomePage(),
     );
   }
 }
@@ -35,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Image.asset('assets/images/uber_logo.png', height: 30.0,), 
         centerTitle: true,
@@ -47,8 +46,8 @@ class _HomePageState extends State<HomePage> {
             child: FlutterMap(
               options: MapOptions(
                 initialCenter:
-                    LatLng(19.432608, -99.133209), // Ciudad de México
-                initialZoom: 12.0,
+                    LatLng(19.352914157905914, -99.28245393774077), // UAM Cuajimalpa
+                initialZoom: 16.0,
               ),
               children: [
                 TileLayer(
@@ -67,15 +66,15 @@ class _HomePageState extends State<HomePage> {
                 _buildOptionButton(
                   'assets/images/uber_planet.png',
                   'UberPlanet', 
-                  'Viaje compartido'),
+                  '\$10 x km'),
                 _buildOptionButton(
                   'assets/images/uber_xl.png', 
                   'UberXL', 
-                  'Viaje compartido'),
+                  '\$15 x km'),
                 _buildOptionButton(
                   'assets/images/uber_black.png', 
                   'UberBlack', 
-                  'Viaje compartido'),
+                  '\$25 x km'),
                 const Spacer(),
                 if (selectedOption != null)
                   Padding(
@@ -90,11 +89,19 @@ class _HomePageState extends State<HomePage> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text('Confirmación'),
-                                  content: Text('Has seleccionado $selectedOption'),
+                                  content: Text('Has solicitado un viaje en $selectedOption'),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
                                         Navigator.of(context).pop(); // Cerrar el diálogo
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => RideInfoScreen(
+                                              rideOption: selectedOption ?? 'N/A',
+                                            ),
+                                          ),
+                                        );
                                       },
                                       child: const Text('OK'),
                                     ),
