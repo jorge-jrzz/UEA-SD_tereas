@@ -53,41 +53,4 @@ class UberService(ride_service_pb2_grpc.RideServiceServicer):
                 success=False,
                 message="Car not found!",
             )
-        '''
-        if self.available_cars >= 0:
-            self.available_cars -= 1
-            self.total_trips += 1
-            self.earnings += 25.00  # Simulated ride cost
-            ride_time = random.randint(0, 5)
-            current_plate = str(self.cars[0].get_plate())
-            return ride_service_pb2.RideResponse(
-                success=True,
-                message="Ride confirmed!",
-                plate=current_plate,
-                estimated_time=f"{ride_time}"
-            )
-        else:
-            return ride_service_pb2.RideResponse(
-                success=False,
-                message="No cars available!",
-                estimated_time="0"
-            )
-        '''
-        '''
-        if self.service_info["available_cars"] > 0:
-            self.service_info["available_cars"] -= 1
-            self.service_info["total_trips"] += 1
-            self.service_info["earnings"] += 25.00  # Simulated ride cost
-            ride_time = random.randint(0, 5)
-            return ride_service_pb2.RideResponse(
-                success=True,
-                message="Ride confirmed!",
-                estimated_time=f"{ride_time}"
-            )
-        else:
-            return ride_service_pb2.RideResponse(
-                success=False,
-                message="No cars available!",
-                estimated_time="N/A"
-            )
-        '''
+
