@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'src/pages/ride_info_screen.dart' show RideInfoScreen;
 import 'src/pages/administrator_screen.dart' show AdministratorScreen;
 import 'src/widgets/button.dart';
+import 'src/widgets/option_button.dart';
 
 void main() {
   runApp(const MyApp());
@@ -68,12 +69,39 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 // const SizedBox(height: 10),
-                _buildOptionButton(
-                    'assets/images/uber_planet.png', 'UberPlanet', '\$10 x km'),
-                _buildOptionButton(
-                    'assets/images/uber_xl.png', 'Uber XL', '\$15 x km'),
-                _buildOptionButton(
-                    'assets/images/uber_black.png', 'Uber Black', '\$25 x km'),
+                OptionButton(
+                  imagePath: 'assets/images/uber_planet.png',
+                  option: 'UberPlanet',
+                  details: '\$9.99',
+                  isSelected: selectedOption == 'UberPlanet',
+                  onTap: () {
+                    setState(() {
+                      selectedOption = 'UberPlanet';
+                    });
+                  },
+                ),
+                OptionButton(
+                  imagePath: 'assets/images/uber_xl.png',
+                  option: 'UberXL',
+                  details: '\$14.99',
+                  isSelected: selectedOption == 'UberXL',
+                  onTap: () {
+                    setState(() {
+                      selectedOption = 'UberXL';
+                    });
+                  },
+                ),
+                OptionButton(
+                  imagePath: 'assets/images/uber_black.png',
+                  option: 'UberBlack',
+                  details: '\$14.99',
+                  isSelected: selectedOption == 'UberBlack',
+                  onTap: () {
+                    setState(() {
+                      selectedOption = 'UberBlack';
+                    });
+                  },
+                ),
 
                 const Spacer(),
 
@@ -103,9 +131,9 @@ class _HomePageState extends State<HomePage> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 RideInfoScreen(
-                                                  rideOption:
-                                                      selectedOption ?? 'N/A',
-                                                ),
+                                              rideOption:
+                                                  selectedOption ?? 'N/A',
+                                            ),
                                           ),
                                         );
                                       },
@@ -117,6 +145,8 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                         ),
+                      
+                      // Boton de información del servicio (siempre aparece)
                       ButtonFuntion(
                           text: 'Información del servicio',
                           color: Colors.black,
@@ -125,10 +155,9 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => AdministratorScreen(
-                                  rideOption:
-                                    selectedOption ?? 'N/A',
-                                  ),
+                                  rideOption: selectedOption ?? 'N/A',
                                 ),
+                              ),
                             );
                           }),
                     ]),
@@ -136,62 +165,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  // Widget para un botón de opción
-  Widget _buildOptionButton(String imagePath, String option, String details) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedOption = option;
-          });
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white, // Fondo blanco
-            border: Border.all(
-              color: selectedOption == option
-                  ? Colors.blue
-                  : Colors.black, // Borde negro (o azul si está seleccionado)
-              width: 2.0,
-            ),
-            borderRadius: BorderRadius.circular(8.0), // Bordes redondeados
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-          child: Row(
-            children: [
-              // Imagen a la izquierda
-              Image.asset(
-                imagePath,
-                width: 50.0,
-              ),
-              const SizedBox(width: 30), // Espacio entre imagen y texto
-              // Texto a la derecha
-              Text(
-                option,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black, // Texto en negro
-                ),
-              ),
-              const Spacer(), // Espacio entre el nombre del Uber y texto de los detalles
-              // Texto de los detalles del precio del servicio
-              Text(
-                details,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.normal,
-                  color: Colors.grey, // Texto en negro
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
