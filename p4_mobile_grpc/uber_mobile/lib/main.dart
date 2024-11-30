@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'ride_info_screen.dart';
+import 'src/pages/ride_info_screen.dart';
 import 'src/widgets/button.dart';
 
 void main() {
@@ -73,50 +73,53 @@ class _HomePageState extends State<HomePage> {
                     'assets/images/uber_xl.png', 'Uber XL', '\$15 x km'),
                 _buildOptionButton(
                     'assets/images/uber_black.png', 'Uber Black', '\$25 x km'),
+
                 const Spacer(),
 
                 Column(
                     // padding: const EdgeInsets.all(16.0),
                     children: [
-                      ButtonFuntion(
-                        text: 'Información del servicio',
-                        color: Colors.black,
-                        onPressed: () {
-                          // Muestra el dialogo de confirmación
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Confirmación'),
-                                content: Text(
-                                    'Has solicitado un viaje en $selectedOption'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context)
-                                          .pop(); // Cerrar el diálogo
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => RideInfoScreen(
-                                            rideOption: selectedOption ?? 'N/A',
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
                       if (selectedOption != null)
                         ButtonFuntion(
-                            text: 'Solicitar viaje',
-                            color: Colors.blue[600]!,
-                            onPressed: () {}),
+                          text: 'Solicitar viaje',
+                          color: Colors.blue[600]!,
+                          onPressed: () {
+                            // Muestra el dialogo de confirmación
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Confirmación'),
+                                  content: Text(
+                                      'Has solicitado un viaje en $selectedOption'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pop(); // Cerrar el diálogo
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                RideInfoScreen(
+                                              rideOption:
+                                                  selectedOption ?? 'N/A',
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ButtonFuntion(
+                          text: 'Información del servicio',
+                          color: Colors.black,
+                          onPressed: () {}),
                     ]),
               ],
             ),
