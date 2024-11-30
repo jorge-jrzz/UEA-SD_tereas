@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'src/pages/ride_info_screen.dart' show RideInfoScreen;
-import 'src/pages/administrator_screen.dart' show AdministratorScreen;
+import 'src/pages/ride_info_screen.dart';
+import 'src/pages/administrator_screen.dart';
 import 'src/widgets/button.dart';
 import 'src/widgets/option_button.dart';
 
@@ -145,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                             );
                           },
                         ),
-                      
+
                       // Boton de información del servicio (siempre aparece)
                       ButtonFuntion(
                           text: 'Información del servicio',
@@ -154,9 +154,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => AdministratorScreen(
-                                  rideOption: selectedOption ?? 'N/A',
-                                ),
+                                builder: (context) => AdministratorScreen(),
                               ),
                             );
                           }),

@@ -28,7 +28,7 @@ class RideInfoScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             const Text(
-              'Gracias por usar nuestro servicio. Puedes esperar la llegada del conductor o solicitar otro viaje.',
+              'Gracias por usar nuestro servicio. Puedes esperar la llegada del conductor o solicitar otro viaje. [Aqui va la informacion del viaje y de cuando acabe xd]',
               style: TextStyle(fontSize: 16),
               textAlign: TextAlign.center,
             ),
