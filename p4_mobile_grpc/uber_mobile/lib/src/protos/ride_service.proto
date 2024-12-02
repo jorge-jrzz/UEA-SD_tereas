@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package ride;
+
+
+service RideService {
+    // Obtiene información del servicio
+    rpc GetServiceInfo (EmptyRequest) returns (ServiceInfo);
+
+    // Solicitar un viaje
+    rpc RequestRide (RideRequest) returns (RideResponse);
+
+    // Finalizar un viaje
+    rpc EndRide (EndRideRequest) returns (EndRideResponse);
+}
+
+// Mensajes
+message EmptyRequest {}
+
+message ServiceInfo {
+    int32 available_cars = 1;
+    int32 total_trips = 2;
+    float earnings = 3;
+}
+
+message RideRequest {
+    string user_id = 1;
+    string ride_type = 2; // UBER_X, UBER_PLANET, UBER_BLACK
+    string pickup_location = 3;
+    string dropoff_location = 4;
+}
+
+message RideResponse {
+    bool success = 1;
+    string message = 2;
+    string plate = 3;
+    string estimated_time = 4;
+}
+
+message EndRideRequest {
+    string plate = 1;
+}
+
+message EndRideResponse {
+    bool success = 1;
+    string message = 2;
+}

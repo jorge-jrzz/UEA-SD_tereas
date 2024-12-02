@@ -132,7 +132,7 @@ packages:
     source: hosted
     version: "1.6.0"
   grpc:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: grpc
       sha256: "5b99b7a420937d4361ece68b798c9af8e04b5bc128a7859f2a4be87427694813"
