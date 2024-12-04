@@ -312,6 +312,25 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
                           color: Colors.blueAccent,
                         ),
                       ),
+                      const SizedBox(
+                          width: 16), // Espacio entre contenido y la foto
+                      // Apartado para la foto del conductor
+                      CircleAvatar(
+                        radius: 30, // Ajusta el tamaño del círculo
+                        backgroundImage: AssetImage(
+                            'assets/images/car1.jpg'), // Ruta de la foto
+                        backgroundColor:
+                            Colors.grey[800], // Color de fondo si no hay imagen
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Dodge Attitude',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
