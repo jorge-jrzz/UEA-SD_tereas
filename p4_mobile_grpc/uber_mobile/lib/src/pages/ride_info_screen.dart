@@ -8,14 +8,14 @@ import '../protos/ride_service.pbgrpc.dart';
 class RideInfoScreen extends StatefulWidget {
   final String userId;
   final String rideType;
-  final String pickupLocation;
-  final String dropoffLocation;
+  //final String pickupLocation;
+  //final String dropoffLocation;
 
   RideInfoScreen({
     this.userId = 'Unknown User',
     this.rideType = 'Standard',
-    this.pickupLocation = 'Unknown Pickup',
-    this.dropoffLocation = 'Unknown Dropoff',
+    //this.pickupLocation = 'Unknown Pickup',
+    //this.dropoffLocation = 'Unknown Dropoff',
   });
 
   @override
@@ -31,14 +31,78 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
   int _rideTime = 0; // Tiempo restante en segundos
   late Timer _timer;
 
+  final Map<String, String> locationLabels = {
+    "UAM Cuajimalpa": "19.352914157905914, -99.28245393774077",
+    "KidZania Santa Fe": "19.360598566916305, -99.27469939680084",
+    "Sams Club Santa Fe": "19.354582788310037, -99.27779629642161",
+    "Hyatt House Mexico City/Santa Fe": "19.35739850095666, -99.28375422038327",
+  };
+
   List<LatLng> _route = [];
   LatLng _currentPosition =
       LatLng(19.352914157905914, -99.28245393774077); // UAM Cuajimalpa
+
+  /*final List<List<LatLng>> _routes = [
+    [
+      LatLng(19.352914157905914, -99.28245393774077), // Inicio
+      LatLng(19.355, -99.28), // Punto cercano
+      LatLng(19.360598566916305, -99.27469939680084), // Final
+    ],
+    [
+      LatLng(19.352914157905914, -99.28245393774077),
+      LatLng(19.354, -99.285),
+      LatLng(19.357618190837886, -99.2778010149107),
+    ],
+    [
+      LatLng(19.352914157905914, -99.28245393774077),
+      LatLng(19.351, -99.281),
+      LatLng(19.360598566916305, -99.27469939680084),
+    ],
+    [
+      LatLng(19.352914157905914, -99.28245393774077),
+      LatLng(19.353, -99.286),
+      LatLng(19.360598566916305, -99.27469939680084),
+    ],
+  ];*/
+
+  final List<Map<String, dynamic>> _routes = [
+    {
+      "pickup": "UAM Cuajimalpa",
+      "dropoff": "KidZania Santa Fe",
+      "points": [
+        LatLng(19.352914157905914, -99.28245393774077),
+        LatLng(19.355, -99.28),
+        LatLng(19.360598566916305, -99.27469939680084),
+      ],
+    },
+    {
+      "pickup": "UAM Cuajimalpa",
+      "dropoff": "Hyatt House Mexico City/Santa Fe",
+      "points": [
+        LatLng(19.352914157905914, -99.28245393774077),
+        LatLng(19.354, -99.285),
+        LatLng(19.357618190837886, -99.2778010149107),
+      ],
+    },
+    {
+      "pickup": "UAM Cuajimalpa",
+      "dropoff": "Sams Club Santa Fe",
+      "points": [
+        LatLng(19.352914157905914, -99.28245393774077),
+        LatLng(19.355, -99.28),
+        LatLng(19.360598566916305, -99.27469939680084),
+      ],
+    },
+    // Agrega más rutas si es necesario
+  ];
+
+  int _currentRouteIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _initializeClient();
+    _setRouteInfo();
     _requestRide();
   }
 
@@ -54,13 +118,29 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
     _client = RideServiceClient(channel);
   }
 
+  /*
+  void _setRouteInfo() {
+    setState(() {
+      _pickupLocation = "Desde: ${_routes[_currentRouteIndex].first}";
+      _dropoffLocation = "Hacia: ${_routes[_currentRouteIndex].last}";
+    });
+  }*/
+
+  void _setRouteInfo() {
+    setState(() {
+      _pickupLocation = "${_routes[_currentRouteIndex]['pickup']}";
+      _dropoffLocation = "${_routes[_currentRouteIndex]['dropoff']}";
+      //_route = _routes[_currentRouteIndex]['points'];
+    });
+  }
+
   Future<void> _requestRide() async {
     try {
       RideRequest rideRequest = RideRequest(
         userId: widget.userId,
         rideType: widget.rideType,
-        pickupLocation: widget.pickupLocation,
-        dropoffLocation: widget.dropoffLocation,
+        //pickupLocation: widget.pickupLocation,
+        //dropoffLocation: widget.dropoffLocation,
       );
       final response = await _client.requestRide(rideRequest);
       setState(() {
@@ -68,8 +148,8 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
         _ridePlate =
             response.plate.isNotEmpty ? response.plate : "No disponible";
         _rideTime = int.parse(response.estimatedTime); // Convertir a segundos
-        _pickupLocation = widget.pickupLocation;
-        _dropoffLocation = widget.dropoffLocation;
+        //_pickupLocation = widget.pickupLocation;
+        //_dropoffLocation = widget.dropoffLocation;
       });
       _startTimer();
     } catch (e) {
@@ -204,14 +284,14 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        'Desde: $_pickupLocation',
+                        'From: $_pickupLocation',
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.grey,
                         ),
                       ),
                       Text(
-                        'Hacia: $_dropoffLocation',
+                        'To: $_dropoffLocation',
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.grey,
@@ -219,14 +299,14 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        'Placa: $_ridePlate',
+                        'Plate: $_ridePlate',
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        'Tiempo estimado: ${_rideTime > 0 ? "${(_rideTime ~/ 60).toString().padLeft(2, '0')}:${(_rideTime % 60).toString().padLeft(2, '0')}" : "Finalizado"}',
+                        'Estimated Time: ${_rideTime > 0 ? "${(_rideTime ~/ 60).toString().padLeft(2, '0')}:${(_rideTime % 60).toString().padLeft(2, '0')}" : "Finalizado"}',
                         style: const TextStyle(
                           fontSize: 16,
                           color: Colors.blueAccent,
@@ -249,7 +329,7 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
                                     vertical: 14, horizontal: 24),
                               ),
                               child: const Text(
-                                'Finalizar Viaje',
+                                'End Ride',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),
@@ -266,7 +346,7 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
                                     vertical: 14, horizontal: 24),
                               ),
                               child: const Text(
-                                'Esperando...',
+                                'Ride in Progress...',
                                 style: TextStyle(
                                     fontSize: 16, color: Colors.white),
                               ),
