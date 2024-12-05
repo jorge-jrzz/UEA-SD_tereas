@@ -130,10 +130,7 @@ class _HomePageState extends State<HomePage> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                RideInfoScreen(
-                                              rideOption:
-                                                  selectedOption ?? 'N/A',
-                                            ),
+                                                RideInfoScreen(),
                                           ),
                                         );
                                       },

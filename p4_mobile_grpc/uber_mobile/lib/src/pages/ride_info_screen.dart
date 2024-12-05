@@ -42,29 +42,6 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
   LatLng _currentPosition =
       LatLng(19.352914157905914, -99.28245393774077); // UAM Cuajimalpa
 
-  /*final List<List<LatLng>> _routes = [
-    [
-      LatLng(19.352914157905914, -99.28245393774077), // Inicio
-      LatLng(19.355, -99.28), // Punto cercano
-      LatLng(19.360598566916305, -99.27469939680084), // Final
-    ],
-    [
-      LatLng(19.352914157905914, -99.28245393774077),
-      LatLng(19.354, -99.285),
-      LatLng(19.357618190837886, -99.2778010149107),
-    ],
-    [
-      LatLng(19.352914157905914, -99.28245393774077),
-      LatLng(19.351, -99.281),
-      LatLng(19.360598566916305, -99.27469939680084),
-    ],
-    [
-      LatLng(19.352914157905914, -99.28245393774077),
-      LatLng(19.353, -99.286),
-      LatLng(19.360598566916305, -99.27469939680084),
-    ],
-  ];*/
-
   final List<Map<String, dynamic>> _routes = [
     {
       "pickup": "UAM Cuajimalpa",
@@ -93,7 +70,6 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
         LatLng(19.360598566916305, -99.27469939680084),
       ],
     },
-    // Agrega más rutas si es necesario
   ];
 
   int _currentRouteIndex = 0;
@@ -117,14 +93,6 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
     );
     _client = RideServiceClient(channel);
   }
-
-  /*
-  void _setRouteInfo() {
-    setState(() {
-      _pickupLocation = "Desde: ${_routes[_currentRouteIndex].first}";
-      _dropoffLocation = "Hacia: ${_routes[_currentRouteIndex].last}";
-    });
-  }*/
 
   void _setRouteInfo() {
     setState(() {
