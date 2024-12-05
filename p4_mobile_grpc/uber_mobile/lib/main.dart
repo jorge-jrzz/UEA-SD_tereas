@@ -63,100 +63,95 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          // Opciones de viaje en la mitad inferior
+          // Opciones de viaje con scroll
           Expanded(
             flex: 1,
-            child: Column(
-              children: [
-                // const SizedBox(height: 10),
-                OptionButton(
-                  imagePath: 'assets/images/uber_planet.png',
-                  option: 'UberPlanet',
-                  details: '\$9.99',
-                  isSelected: selectedOption == 'UberPlanet',
-                  onTap: () {
-                    setState(() {
-                      selectedOption = 'UberPlanet';
-                    });
-                  },
-                ),
-                OptionButton(
-                  imagePath: 'assets/images/uber_xl.png',
-                  option: 'UberXL',
-                  details: '\$14.99',
-                  isSelected: selectedOption == 'UberXL',
-                  onTap: () {
-                    setState(() {
-                      selectedOption = 'UberXL';
-                    });
-                  },
-                ),
-                OptionButton(
-                  imagePath: 'assets/images/uber_black.png',
-                  option: 'UberBlack',
-                  details: '\$14.99',
-                  isSelected: selectedOption == 'UberBlack',
-                  onTap: () {
-                    setState(() {
-                      selectedOption = 'UberBlack';
-                    });
-                  },
-                ),
-
-                const Spacer(),
-
-                Column(
-                    // padding: const EdgeInsets.all(16.0),
-                    children: [
-                      if (selectedOption != null)
-                        ButtonFuntion(
-                          text: 'Solicitar viaje',
-                          color: Colors.blue[600]!,
-                          onPressed: () {
-                            // Muestra el dialogo de confirmación
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Confirmación'),
-                                  content: Text(
-                                      'Has solicitado un viaje en $selectedOption'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(); // Cerrar el diálogo
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                RideInfoScreen(),
-                                          ),
-                                        );
-                                      },
-                                      child: const Text('OK'),
-                                    ),
-                                  ],
-                                );
-                              },
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  OptionButton(
+                    imagePath: 'assets/images/uber_planet.png',
+                    option: 'UberPlanet',
+                    details: '\$9.99',
+                    isSelected: selectedOption == 'UberPlanet',
+                    onTap: () {
+                      setState(() {
+                        selectedOption = 'UberPlanet';
+                      });
+                    },
+                  ),
+                  OptionButton(
+                    imagePath: 'assets/images/uber_xl.png',
+                    option: 'UberXL',
+                    details: '\$14.99',
+                    isSelected: selectedOption == 'UberXL',
+                    onTap: () {
+                      setState(() {
+                        selectedOption = 'UberXL';
+                      });
+                    },
+                  ),
+                  OptionButton(
+                    imagePath: 'assets/images/uber_black.png',
+                    option: 'UberBlack',
+                    details: '\$14.99',
+                    isSelected: selectedOption == 'UberBlack',
+                    onTap: () {
+                      setState(() {
+                        selectedOption = 'UberBlack';
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  if (selectedOption != null)
+                    ButtonFuntion(
+                      text: 'Solicitar viaje',
+                      color: Colors.blue[600]!,
+                      onPressed: () {
+                        // Muestra el dialogo de confirmación
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Confirmación'),
+                              content: Text(
+                                  'Has solicitado un viaje en $selectedOption'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Cerrar el diálogo
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            RideInfoScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text('OK'),
+                                ),
+                              ],
                             );
                           },
+                        );
+                      },
+                    ),
+                  // Botón de información del servicio (siempre aparece)
+                  ButtonFuntion(
+                    text: 'Información del servicio',
+                    color: Colors.black,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AdministratorScreen(),
                         ),
-
-                      // Boton de información del servicio (siempre aparece)
-                      ButtonFuntion(
-                          text: 'Información del servicio',
-                          color: Colors.black,
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => AdministratorScreen(),
-                              ),
-                            );
-                          }),
-                    ]),
-              ],
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ],
