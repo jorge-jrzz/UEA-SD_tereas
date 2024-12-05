@@ -3,6 +3,7 @@ import '../widgets/button.dart';
 import 'package:grpc/grpc.dart';
 //import 'package:grpc/grpc_web.dart';
 import '../protos/ride_service.pbgrpc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 //import 'package:ride_service/src/generated/ride_service.pbgrpc.dart'; // Asegúrate de que este sea el path correcto
 class AdministratorScreen extends StatefulWidget {
@@ -23,9 +24,11 @@ class _AdministratorScreenState extends State<AdministratorScreen> {
     _fetchServiceInfo();
   }
 
+  final String host = dotenv.env['SERVER_HOST'] ?? 'localhost';
+
   void _initializeClient() {
     final channel = ClientChannel(
-      'localhost',
+      host,
       port: 50051,
       options: const ChannelOptions(
         credentials:

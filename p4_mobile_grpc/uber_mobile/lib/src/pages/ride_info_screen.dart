@@ -4,6 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:grpc/grpc.dart';
 import '../protos/ride_service.pbgrpc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class RideInfoScreen extends StatefulWidget {
   final String userId;
@@ -82,9 +83,11 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
     _requestRide();
   }
 
+  final String host = dotenv.env['SERVER_HOST'] ?? 'localhost';
+
   void _initializeClient() {
     final channel = ClientChannel(
-      'localhost',
+      host,
       port: 50051,
       options: const ChannelOptions(
         credentials: ChannelCredentials.insecure(),

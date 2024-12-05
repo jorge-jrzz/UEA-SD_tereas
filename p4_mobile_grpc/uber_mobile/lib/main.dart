@@ -5,10 +5,17 @@ import 'src/pages/ride_info_screen.dart';
 import 'src/pages/administrator_screen.dart';
 import 'src/widgets/button.dart';
 import 'src/widgets/option_button.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future<void> main() async {
+  // Cargar las variables de entorno desde el archivo .env
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
+
+// void main() {
+//   runApp(const MyApp());
+// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
