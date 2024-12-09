@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'src/pages/ride_info_screen.dart';
 import 'src/pages/administrator_screen.dart';
@@ -13,9 +12,6 @@ Future<void> main() async {
   runApp(const MyApp());
 }
 
-// void main() {
-//   runApp(const MyApp());
-// }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -44,32 +40,15 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: Image.asset(
-          'assets/images/uber_logo.png',
-          height: 25.0,
-        ),
-        centerTitle: true,
-      ),
+      // appBar: AppBar(
+      //   title: Image.asset(
+      //     'assets/images/uber_logo.png',
+      //     height: 25.0,
+      //   ),
+      //   centerTitle: true,
+      // ),
       body: Column(
         children: [
-          // Mapa en la mitad superior
-          Expanded(
-            flex: 1,
-            child: FlutterMap(
-              options: MapOptions(
-                initialCenter: LatLng(
-                    19.352914157905914, -99.28245393774077), // UAM Cuajimalpa
-                initialZoom: 16.7,
-              ),
-              children: [
-                TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  subdomains: ['a', 'b', 'c'],
-                ),
-              ],
-            ),
-          ),
           // Opciones de viaje con scroll
           Expanded(
             flex: 1,
@@ -78,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   OptionButton(
-                    imagePath: 'assets/images/uber_planet.png',
+                    imagePath: 'assets/images/chevy_pop.png',
                     option: 'UberPlanet',
                     details: '\$9.99',
                     isSelected: selectedOption == 'UberPlanet',
@@ -89,7 +68,7 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   OptionButton(
-                    imagePath: 'assets/images/uber_xl.png',
+                    imagePath: 'assets/images/chevy_pop.png',
                     option: 'UberXL',
                     details: '\$14.99',
                     isSelected: selectedOption == 'UberXL',
@@ -100,9 +79,9 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                   OptionButton(
-                    imagePath: 'assets/images/uber_black.png',
+                    imagePath: 'assets/images/chevy_pop.png',
                     option: 'UberBlack',
-                    details: '\$14.99',
+                    details: '\$24.99',
                     isSelected: selectedOption == 'UberBlack',
                     onTap: () {
                       setState(() {

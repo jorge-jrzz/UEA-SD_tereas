@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:grpc/grpc.dart';
 import '../protos/ride_service.pbgrpc.dart';
@@ -186,49 +185,49 @@ class _RideInfoScreenState extends State<RideInfoScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          FlutterMap(
-            options: MapOptions(
-              initialCenter: LatLng(
-                  19.352914157905914, -99.28245393774077), // UAM Cuajimalpa
-              initialZoom: 16.7,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                subdomains: ['a', 'b', 'c'],
-              ),
-              PolylineLayer(
-                polylines: [
-                  Polyline(
-                    points: _route,
-                    strokeWidth: 4.0,
-                    color: Colors.blue,
-                  ),
-                ],
-              ),
-              MarkerLayer(
-                markers: [
-                  /*Marker(
-                    point: _currentPosition,
-                    builder: (context) => Icon(
-                      Icons.location_pin,
-                      color: Colors.red,
-                      size: 40,
-                    ),
-                  ),*/
+          // FlutterMap(
+          //   options: MapOptions(
+          //     initialCenter: LatLng(
+          //         19.352914157905914, -99.28245393774077), // UAM Cuajimalpa
+          //     initialZoom: 16.7,
+          //   ),
+          //   children: [
+          //     TileLayer(
+          //       urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          //       subdomains: ['a', 'b', 'c'],
+          //     ),
+          //     PolylineLayer(
+          //       polylines: [
+          //         Polyline(
+          //           points: _route,
+          //           strokeWidth: 4.0,
+          //           color: Colors.blue,
+          //         ),
+          //       ],
+          //     ),
+          //     MarkerLayer(
+          //       markers: [
+          //         /*Marker(
+          //           point: _currentPosition,
+          //           builder: (context) => Icon(
+          //             Icons.location_pin,
+          //             color: Colors.red,
+          //             size: 40,
+          //           ),
+          //         ),*/
 
-                  Marker(
-                    point: _currentPosition,
-                    child: const Icon(
-                      Icons.directions_car,
-                      color: Colors.red,
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+          //         Marker(
+          //           point: _currentPosition,
+          //           child: const Icon(
+          //             Icons.directions_car,
+          //             color: Colors.red,
+          //             size: 30,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ],
+          // ),
           // Tarjeta flotante con la INFORMACION del viaje
           Align(
             alignment: Alignment.bottomCenter,
